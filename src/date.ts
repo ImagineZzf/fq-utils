@@ -1,8 +1,9 @@
 /**
  * 获取格林威治时间
- * @param date Date | string | number
+ * @param date 传入日期
+ * @returns
  */
- export const getDate = (date: Date | string | number) => {
+export const getDate = (date: Date | string | number): Date => {
   if (date instanceof Date) {
     return date
   }
