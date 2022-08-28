@@ -22,6 +22,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run doc
+      - run: npm run vuepress
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
@@ -30,5 +31,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.2.3
         with:
           branch: gh-pages
-          folder: docs
+          folder: docs/.vuepress/dist
           token: "${{ secrets.DEPLOY_TOKEN }}"
