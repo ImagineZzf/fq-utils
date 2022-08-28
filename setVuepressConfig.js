@@ -5,8 +5,7 @@ const vuepressConfig = fs.readFileSync(
   path.resolve(__dirname, './vuepressConfig.js'),
   'utf8'
 )
-fs.writeFile(
+fs.writeFileSync(
   path.resolve(__dirname, './docs/.vuepress/config.js'),
-  vuepressConfig,
-  (err, data) => {}
+  vuepressConfig
 )
