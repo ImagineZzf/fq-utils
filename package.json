@@ -1,0 +1,35 @@
+{
+  "name": "fq-utils",
+  "version": "1.0.0",
+  "description": "This is a base library",
+  "keywords": [
+    "fq",
+    "utils"
+  ],
+  "main": "dist/bundle.js",
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w",
+    "doc": "typedoc --tsconfig tsconfig.json --options ./typedoc.config.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ImagineZzf/fq-utils.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.4",
+    "@types/node": "^18.7.6",
+    "rollup": "^2.78.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.4.0",
+    "typedoc": "^0.23.10",
+    "typescript": "^4.7.4"
+  }
+}
