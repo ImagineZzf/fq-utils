@@ -14,16 +14,20 @@ jobs:
       - name: Checkout code
       - uses: actions/checkout@v3
       - name: Download Node
-      - uses: actions/setup-node@v3
+        uses: actions/setup-node@v3
         with:
           node-version: '16.13.2'
       - name: Install Dependencies
       - run: npm ci
-      - name: Build
       - run: npm run build
-      - name: Build Docs
       - run: npm run doc
-      - name: Npm Publish
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          
+      - name: deploy
+        uses: JamesIves/github-pages-deploy-action@v4.2.3
+        with:
+          branch: gh-pages
+          folder: docs
+          token: "${{ secrets.DEPLOY_TOKEN }}"
