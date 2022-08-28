@@ -17,7 +17,7 @@ export enum StartPositionEnum {
  * @param {StartPositionEnum} startPosition 从什么位置开始填充
  * @return {strOrNumType} 返回修正后的字符串或数字
  */
-export const reviseLength = <T extends strOrNumType>(params: T, len: number, fillText: string = '0', startPosition: StartPositionEnum = StartPositionEnum.END) => {
+export const reviseLength = <T extends strOrNumType>(params: T, len: number, fillText: string = '0', startPosition: StartPositionEnum = StartPositionEnum.END): strOrNumType => {
   // 获取传入字符串的长度
   let newParams = params + ''
   if (newParams.length >= len) {
