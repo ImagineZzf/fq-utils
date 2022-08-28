@@ -10,7 +10,6 @@
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -c -w",
-    "postbuild": "npm version patch",
     "doc": "typedoc --tsconfig tsconfig.json --options ./typedoc.config.json",
     "vuepress:dev": "vuepress dev docs",
     "prevuepress": "node ./setVuepressConfig.js",
