@@ -1,11 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 
-const vuepressConfig = fs.readFileSync(
-  path.resolve(__dirname, './vuepressConfig.js'),
-  'utf8'
-)
-fs.writeFileSync(
-  path.resolve(__dirname, './docs/.vuepress/config.js'),
-  vuepressConfig
-)
+const vuepressConfig = fs.readFileSync('./vuepressConfig.js')
+
+fs.mkdir('./docs/.vuepress', { recursive: true }, () => {
+  fs.writeFile('./docs/.vuepress/config.js', vuepressConfig, {}, () => {})
+})
