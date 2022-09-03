@@ -1,7 +1,7 @@
 import { strOrNumType } from "./interface";
 
 /**
- * @description: 开始位置
+ * @description 开始位置
  * @return {*}
  */
 export enum StartPositionEnum {
@@ -10,7 +10,8 @@ export enum StartPositionEnum {
 }
 
 /**
- * @description: 修正字符串或数字的长度
+ * @group 【public】
+ * @category 修正字符串或数字的长度
  * @param {strOrNumType} params 传入的字符串或数字
  * @param {number} len 修正后的长度
  * @param {string} fillText 修正时填充用的字符
