@@ -3,7 +3,8 @@ import { dateType, strOrNumType } from "./interface"
 import { padNumber } from "./number"
 
 /**
- * @description: 获取格林威治时间
+ * @group 【date】
+ * @category 获取格林威治时间
  * @param {Date} date 传入日期
  * @return {Date} 格林威治时间
  */
@@ -37,7 +38,8 @@ export const getDate = (date: dateType): Date => {
 }
 
 /**
- * @description: 格式化日期
+ * @group 【date】
+ * @category 格式化日期
  * @param {dateType} time 要进行格式化的日期数据
  * @param {string} format 格式
  * @param {string} fillZero 是否自动补零，默认自动补零
