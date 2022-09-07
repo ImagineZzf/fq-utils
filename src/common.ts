@@ -1,4 +1,4 @@
-import { strOrNumType } from "./interface";
+import { strOrNumType, CASE_TYPE } from "./interface";
 
 /**
  * @description 开始位置
@@ -27,4 +27,15 @@ export const reviseLength = <T extends strOrNumType>(params: T, len: number, fil
     newParams = startPosition === StartPositionEnum.END ? newParams.padEnd(len, fillText) : newParams.padStart(len, fillText)
   }
   return typeof params === 'number' ? parseInt(newParams) : newParams
+}
+
+/**
+ * @group 【public】
+ * @category 获取数据类型
+ * @param {any} data 传入的数据
+ * @param {CASE_TYPE} caseType 返回的字符串全部小写、或全部大写
+ * @return {*} 返回数据类型字符串
+ */
+export const getDataType = (data: any, caseType: CASE_TYPE = CASE_TYPE.LOWER): string => {
+  return Object.prototype.toString.call(data).match(/\s+(\S*)\]/)[1]
 }
