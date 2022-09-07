@@ -10,3 +10,25 @@ export type strOrNumType = string | number
  * @return {*}
  */
 export type dateType = Date | strOrNumType
+
+/**
+ * @description 日期对象
+ * @return {*}
+ */
+ export interface dateInterFace {
+  year?: strOrNumType,
+  month?: strOrNumType,
+  day?: strOrNumType,
+  hour?: strOrNumType
+  minute?: strOrNumType
+  second?: strOrNumType
+}
+
+/**
+ * @description 大小写类型
+ * @return {*}
+ */
+export enum CASE_TYPE {
+  LOWER = 'lower',
+  UPPER = 'upper'
+}
