@@ -115,7 +115,7 @@ export enum DateTimeDiffType {
 
 /**
  * @group 【date】
- * @category 获取两个日期相差多长时间（绝对值）
+ * @category 获取两个日期之差（绝对值）
  * @param {dateType} firstDate 第一个日期
  * @param {dateType} secondDate 第二个日期，默认当前时间
  * @param {dateType} returnType 返回数据的类型
