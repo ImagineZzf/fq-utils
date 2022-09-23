@@ -1,12 +1,13 @@
 {
   "name": "fq-utils",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "This is a base library",
   "keywords": [
     "fq",
     "utils"
   ],
   "main": "dist/bundle.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -c -w",
