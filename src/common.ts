@@ -37,5 +37,36 @@ export const reviseLength = <T extends strOrNumType>(params: T, len: number, fil
  * @return {*} 返回数据类型字符串
  */
 export const getDataType = (data: any, caseType: CASE_TYPE = CASE_TYPE.LOWER): string => {
-  return Object.prototype.toString.call(data).match(/\s+(\S*)\]/)[1]
+  const type = Object.prototype.toString.call(data).match(/\s+(\S*)\]/)[1]
+  return caseType === CASE_TYPE.LOWER ? type.toLowerCase() : caseType === CASE_TYPE.UPPER ? type.toUpperCase() : type
+}
+
+/**
+ * @group 【public】
+ * @category 判断是否是null
+ * @param {any} params 传入的数据
+ * @return {*} 返回是否是null
+ */
+export const isNull = (params: any): boolean => {
+  return getDataType(params) === 'null'
+}
+
+/**
+ * @group 【public】
+ * @category 判断是否是undefined
+ * @param {any} params 传入的数据
+ * @return {*} 返回是否是undefined
+ */
+export const isUndefined = (params: any): boolean => {
+  return getDataType(params) === 'undefined'
+}
+
+/**
+ * @group 【public】
+ * @category 判断是否是空（空字符串\null\undefined）
+ * @param {any} params 传入的数据
+ * @return {*} 返回是否是空
+ */
+export const isEmpty = (params): boolean => {
+  return params === '' || isNull(params) || isUndefined(params)
 }

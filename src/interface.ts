@@ -32,3 +32,8 @@ export enum CASE_TYPE {
   LOWER = 'lower',
   UPPER = 'upper'
 }
+/**
+ * @description js包含的基础数据类型
+ * @return {*}
+ */
+export type baseType = number | string | boolean | null | undefined | any[] | object | symbol

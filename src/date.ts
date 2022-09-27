@@ -1,7 +1,40 @@
-import { reviseLength } from "./common"
+import { isEmpty, reviseLength } from "./common"
 import { dateType, strOrNumType, dateInterFace } from "./interface"
-import { padNumber } from "./number"
+import { getNumberLength, padNumber } from "./number"
 import { getStringFromObj } from "./string"
+
+/**
+ * @group 【date】
+ * @category 判断是否是日期格式的数据
+ * @param {any} date 传入的数据
+ * @return {boolean} 是否是日期格式的数据
+ */
+export const isDate = (date: any): boolean => {
+  if (isEmpty(date)) {
+    return false
+  }
+  if (date instanceof Date) {
+    return true
+  }
+  // 如果是13位纯数字、或10位纯数字
+  if (typeof date === 'number' && getNumberLength(date) === 13 || getNumberLength(date) === 10) {
+    return true
+  }
+  // 如果是13位纯数字字符串、或10位纯数字字符串
+  if (typeof date === 'string') {
+    if (!isNaN(+date) && date.length === 13 || date.length === 10) {
+      return true
+    }
+    const newDate = date.replace(/\-/g, '/').replace(/\./g, '/')
+    const newDateTwo = newDate.replace(/\//g, '-')
+    if (isNaN(new Date(newDate).getTime()) && isNaN(new Date(newDateTwo).getTime())) {
+      return false
+    } else {
+      return true
+    }
+  }
+  return false
+}
 
 /**
  * @group 【date】
@@ -122,9 +155,7 @@ export enum DateTimeDiffType {
  * @return {dateInterFace | strOrNumType} 返回两个日期相差的时间
  */
 export const getTimeDiffAbs = (firstDate: dateType, secondDate: dateType = new Date(), returnType: DateTimeDiffType = DateTimeDiffType.STRING): dateInterFace | strOrNumType => {
-  const firstDateTime = getDate(firstDate).getTime()
-  const secondDateTime = getDate(secondDate).getTime()
-  const diffTimeAbs = Math.abs(firstDateTime - secondDateTime)
+  const diffTimeAbs = Math.abs(getTimeDiff(firstDate, secondDate))
   // 如果是返回数字类型，则将相差的时间戳直接返回
   if (returnType === DateTimeDiffType.NUMBER) {
     return diffTimeAbs
@@ -150,4 +181,17 @@ export const getTimeDiffAbs = (firstDate: dateType, secondDate: dateType = new D
     return dateTimeDiffObj
   }
   return getStringFromObj(dateTimeDiffObj, DATA_UNIT)
+}
+
+/**
+ * @group 【date】
+ * @category 获取两个日期之差
+ * @param {dateType} firstDate 第一个日期
+ * @param {dateType} secondDate 第二个日期，默认当前时间
+ * @return {number} 返回两个日期相差的时间
+ */
+export const getTimeDiff = (firstDate: dateType, secondDate: dateType = new Date()): number => {
+  const firstDateTime = getDate(firstDate).getTime()
+  const secondDateTime = getDate(secondDate).getTime()
+  return firstDateTime - secondDateTime
 }
