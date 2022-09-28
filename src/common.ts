@@ -1,4 +1,4 @@
-import { strOrNumType, CASE_TYPE } from "./interface";
+import { strOrNumType, CASE_TYPE, baseType } from "./interface";
 
 /**
  * @description 开始位置
@@ -37,5 +37,75 @@ export const reviseLength = <T extends strOrNumType>(params: T, len: number, fil
  * @return {*} 返回数据类型字符串
  */
 export const getDataType = (data: any, caseType: CASE_TYPE = CASE_TYPE.LOWER): string => {
-  return Object.prototype.toString.call(data).match(/\s+(\S*)\]/)[1]
+  const type = Object.prototype.toString.call(data).match(/\s+(\S*)\]/)[1]
+  return caseType === CASE_TYPE.LOWER ? type.toLowerCase() : caseType === CASE_TYPE.UPPER ? type.toUpperCase() : type
+}
+
+/**
+ * @group 【public】
+ * @category 判断是否是null
+ * @param {any} params 传入的数据
+ * @return {*} 返回是否是null
+ */
+export const isNull = (params: any): boolean => {
+  return getDataType(params) === 'null'
+}
+
+/**
+ * @group 【public】
+ * @category 判断是否是undefined
+ * @param {any} params 传入的数据
+ * @return {*} 返回是否是undefined
+ */
+export const isUndefined = (params: any): boolean => {
+  return getDataType(params) === 'undefined'
+}
+
+/**
+ * @group 【public】
+ * @category 判断是否是空（空字符串\null\undefined）
+ * @param {any} params 传入的数据
+ * @return {*} 返回是否是空
+ */
+export const isEmpty = (params): boolean => {
+  return params === '' || isNull(params) || isUndefined(params)
+}
+
+/**
+ * @group 【public】
+ * @category 转换基础数据类型
+ * @param {baseType} params 要转换的数据
+ * @param {baseType} target 目标数据类型
+ * @return {*} 转换后的数据
+ */
+export const transfromDataType = <T extends Exclude<baseType, symbol>>(params: baseType, targetType: T): Exclude<baseType, symbol> => {
+  const paramsDataType = getDataType(params)
+  if (paramsDataType === targetType) {
+    return (params as T)
+  }
+  let targetValue: Exclude<baseType, symbol>
+  switch(targetType) {
+    case 'number':
+      targetValue = +(params as T)
+      break;
+    case 'string':
+      targetValue = (params as T) + ''
+      break;
+    case 'boolean':
+      targetValue = !!params
+      break;
+    case 'array':
+      targetValue = [params]
+      break;
+    case 'null':
+      targetValue = null
+      break;
+    case 'undefined':
+      targetValue = void(0)
+      break;
+    default:
+      targetValue = null
+      break;
+  }
+  return targetValue
 }
