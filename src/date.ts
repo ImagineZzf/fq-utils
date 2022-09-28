@@ -195,3 +195,14 @@ export const getTimeDiff = (firstDate: dateType, secondDate: dateType = new Date
   const secondDateTime = getDate(secondDate).getTime()
   return firstDateTime - secondDateTime
 }
+
+/**
+ * @group 【date】
+ * @category 判断日期是否比目标日期小
+ * @param {dateType} compareDate 要比较的日期
+ * @param {dateType} targetDate 目标日期
+ * @return {boolean} 是否比目标日期小
+ */
+export const isLessThanTargetDate = (compareDate: dateType, targetDate: dateType = new Date()): boolean => {
+  return getTimeDiff(compareDate, targetDate) < 0
+}

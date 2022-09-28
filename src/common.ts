@@ -1,4 +1,4 @@
-import { strOrNumType, CASE_TYPE } from "./interface";
+import { strOrNumType, CASE_TYPE, baseType } from "./interface";
 
 /**
  * @description 开始位置
@@ -69,4 +69,43 @@ export const isUndefined = (params: any): boolean => {
  */
 export const isEmpty = (params): boolean => {
   return params === '' || isNull(params) || isUndefined(params)
+}
+
+/**
+ * @group 【public】
+ * @category 转换基础数据类型
+ * @param {baseType} params 要转换的数据
+ * @param {baseType} target 目标数据类型
+ * @return {*} 转换后的数据
+ */
+export const transfromDataType = <T extends Exclude<baseType, symbol>>(params: baseType, targetType: T): Exclude<baseType, symbol> => {
+  const paramsDataType = getDataType(params)
+  if (paramsDataType === targetType) {
+    return (params as T)
+  }
+  let targetValue: Exclude<baseType, symbol>
+  switch(targetType) {
+    case 'number':
+      targetValue = +(params as T)
+      break;
+    case 'string':
+      targetValue = (params as T) + ''
+      break;
+    case 'boolean':
+      targetValue = !!params
+      break;
+    case 'array':
+      targetValue = [params]
+      break;
+    case 'null':
+      targetValue = null
+      break;
+    case 'undefined':
+      targetValue = void(0)
+      break;
+    default:
+      targetValue = null
+      break;
+  }
+  return targetValue
 }
