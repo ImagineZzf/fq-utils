@@ -8,6 +8,8 @@ export * from './number'
 export * from './string'
 // storage相关方法
 export * from './storage'
+// 浏览器相关方法
+export * from './brower'
 
 // 导出类型
 export * from './interface'
