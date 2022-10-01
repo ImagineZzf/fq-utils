@@ -21,6 +21,9 @@ export interface storageObj {
  * @return {baseType} 返回获取到的value值
  */
 export const getStorage = (key: string): baseType => {
+  if (typeof window === 'undefined') {
+    return
+  }
   const value = localStorage.getItem(key)
   const returnEmptyValue = void(0)
   if (isEmpty(value)) {
@@ -65,6 +68,9 @@ export const getStorage = (key: string): baseType => {
   * @return {*}
   */
  export const setStorage = (key: string, value: baseType, expire: dateType = 365, containType: boolean = true): void => {
+  if (typeof window === 'undefined') {
+    return
+  }
   const params: storageObj = {
     value,
     date: getDate('').getTime()
@@ -85,6 +91,9 @@ export const getStorage = (key: string): baseType => {
  * @return {*}
  */
 export const removeStorage = (key: string): void => {
+  if (typeof window === 'undefined') {
+    return
+  }
   localStorage.removeItem(key)
 }
 
@@ -94,5 +103,8 @@ export const removeStorage = (key: string): void => {
  * @return {*}
  */
  export const clearStorage = (): void => {
+  if (typeof window === 'undefined') {
+    return
+  }
   localStorage.clear()
 }
