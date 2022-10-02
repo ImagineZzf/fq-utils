@@ -47,7 +47,7 @@ export const getBrowerType = (): browerType | 'unknown' => {
  * @category 是否是IE浏览器
  * @return {*}
  */
-export const isIE = () => {
+export const isIE = (): boolean => {
   return getBrowerType() === browerType.ie
 }
 
@@ -56,7 +56,7 @@ export const isIE = () => {
  * @category 是否是Edg浏览器
  * @return {*}
  */
-export const isEdg = () => {
+export const isEdg = (): boolean => {
   return getBrowerType() === browerType.edg
 }
 
@@ -65,7 +65,7 @@ export const isEdg = () => {
  * @category 是否是safari浏览器
  * @return {*}
  */
-export const isSafari = () => {
+export const isSafari = (): boolean => {
   return getBrowerType() === browerType.safari
 }
 
@@ -74,7 +74,7 @@ export const isSafari = () => {
  * @category 是否是Firefox浏览器
  * @return {*}
  */
-export const isFirefox = () => {
+export const isFirefox = (): boolean => {
   return getBrowerType() === browerType.firefox
 }
 
@@ -83,7 +83,7 @@ export const isFirefox = () => {
  * @category 是否是微信浏览器
  * @return {*}
  */
-export const isWeixin = () => {
+export const isWeixin = (): boolean => {
   return getBrowerType() === browerType.weixin
 }
 
@@ -92,7 +92,7 @@ export const isWeixin = () => {
  * @category 是否是移动端微信浏览器
  * @return {*}
  */
-export const isMobileWeixin = () => {
+export const isMobileWeixin = (): boolean => {
   return isMobile() && getBrowerType() === browerType.weixin
 }
 
@@ -101,7 +101,7 @@ export const isMobileWeixin = () => {
  * @category 是否PC端微信浏览器
  * @return {*}
  */
-export const isPcWeixin = () => {
+export const isPcWeixin = (): boolean => {
   return !isMobile() && getBrowerType() === browerType.weixin
 }
 
@@ -110,7 +110,7 @@ export const isPcWeixin = () => {
  * @category 是否移动端浏览器
  * @return {*}
  */
-export const isMobile = () => {
+export const isMobile = (): boolean => {
   if (typeof window === 'undefined') {
     return false
   }
