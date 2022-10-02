@@ -9,7 +9,8 @@ export enum browerType {
   ie = 'ie',
   edg = 'edg',
   chrome = 'chrome',
-  safari = 'safari'
+  safari = 'safari',
+  weixin = 'weixin'
 }
 
 /**
@@ -34,6 +35,8 @@ export const getBrowerType = (): browerType | 'unknown' => {
     return browerType.chrome
   } else if (ua.indexOf("safari") > -1) {
     return browerType.safari
+  } else if (ua.indexOf('micromessenger') > -1) {
+    return browerType.weixin
   } else {
     return 'unknown'
   }
@@ -73,6 +76,33 @@ export const isSafari = () => {
  */
 export const isFirefox = () => {
   return getBrowerType() === browerType.firefox
+}
+
+/**
+ * @group 【brower】
+ * @category 是否是微信浏览器
+ * @return {*}
+ */
+export const isWeixin = () => {
+  return getBrowerType() === browerType.weixin
+}
+
+/**
+ * @group 【brower】
+ * @category 是否是移动端微信浏览器
+ * @return {*}
+ */
+export const isMobileWeixin = () => {
+  return isMobile() && getBrowerType() === browerType.weixin
+}
+
+/**
+ * @group 【brower】
+ * @category 是否PC端微信浏览器
+ * @return {*}
+ */
+export const isPcWeixin = () => {
+  return !isMobile() && getBrowerType() === browerType.weixin
 }
 
 /**
