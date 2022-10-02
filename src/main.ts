@@ -10,6 +10,8 @@ export * from './string'
 export * from './storage'
 // 浏览器相关方法
 export * from './brower'
+// 文件相关方法
+export * from './file'
 
 // 导出类型
 export * from './interface'

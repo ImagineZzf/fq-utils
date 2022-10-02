@@ -211,11 +211,14 @@ export const isLessThanTargetDate = (compareDate: dateType, targetDate: dateType
  * @group 【date】
  * @category 获取目标日期零点的时间戳
  * @param {dateType} targetDate 目标日期
- * @return {*} 返回目标日期零点的时间戳
+ * @return {number} 返回目标日期零点的时间戳
  */
-export const getZeroEndTimeStamp = (targetDate: dateType = new Date()): number => {
+export const getZeroEndTimeStamp = (targetDate: dateType = new Date(), returnStamp: boolean = true): dateType => {
   const newDate = getDate(targetDate)
   newDate.setHours(0, 0, 0, 0)
+  if (!returnStamp) {
+    return newDate
+  }
   return newDate.getTime()
 }
 
@@ -257,7 +260,7 @@ export const getDateText = ({
   const targetTimeStamp = targetTime.getTime() // 要处理的日期时间戳
   const currentTime = new Date()
   const currentTimeStamp = currentTime.getTime() // 当前日期时间戳
-  const currentZeroEndTimeStamp = getZeroEndTimeStamp(); // 当前日期零点的时间戳
+  const currentZeroEndTimeStamp = getZeroEndTimeStamp() as number; // 当前日期零点的时间戳
   const timeDiff = (currentTimeStamp - targetTimeStamp) / +DATA_LIMIT_NUMBER.second // 取当前时间戳与目标时间戳的差值
   const dayDiff = Math.ceil((currentZeroEndTimeStamp - targetTimeStamp) / +DATA_LIMIT_NUMBER.day) //  取当日零点时间戳与目标时间戳的差值
   const dayDiffAbs = Math.abs(dayDiff)
@@ -316,7 +319,7 @@ export const getDateText = ({
  * @group 【date】
  * @category 获取某个月有多少天
  * @param {dateType} targetDate 目标日期
- * @return {*} 返回天数
+ * @return {number} 返回天数
  */
 export const getDaysOfMonth = (targetDate: dateType = new Date()): number => {
   const newDate = getDate(targetDate)
@@ -330,11 +333,48 @@ export const getDaysOfMonth = (targetDate: dateType = new Date()): number => {
  * @param {number} day 天数【可正可负】，如果为负数，则为N天前的日期
  * @param {dateType} targetDate 目标日期
  * @param {string} format 日期格式
- * @return {*} 格式化后的N天后的日期
+ * @return {string} 格式化后的N天后的日期
  */
-export const getDateAfterDay = (day: number, targetDate: dateType = new Date(), format: string = 'YYYY-MM-DD') => {
+export const getDateAfterDay = (day: number, targetDate: dateType = new Date(), format: string = 'YYYY-MM-DD'): string => {
   const newDate = getDate(targetDate)
-  // TODO: 待处理
-  // newDate.setDate(newDate.getDate() + parseInt(day))
+  newDate.setDate(newDate.getDate() + parseInt(day + ''))
   return formatDate(newDate, format)
+}
+
+/**
+ * @description 年龄比较精度
+ * @return {*}
+ */
+export enum ageComparePrecision {
+  year = 'year',
+  month = 'month',
+  day = 'day'
+}
+
+/**
+ * @group 【date】
+ * @category 获取年龄大小
+ * @param {dateType} birthDay 出生日期
+ * @return {number} 返回年龄
+ */
+export const getAge = (birthDay: dateType, comparePrecision: ageComparePrecision = ageComparePrecision.year): number => {
+  const birthDate = getDate(birthDay) // 出生日期
+  const currentDate = new Date() // 当前日期
+  let age = currentDate.getFullYear() - birthDate.getFullYear()
+  switch(comparePrecision) {
+    case ageComparePrecision.month:
+      if (currentDate.getMonth() < birthDate.getMonth()) {
+        age--
+      }
+      break;
+    case ageComparePrecision.day:
+      if (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate()) {
+        age--
+      }
+      break;
+    default:
+      break;
+  }
+
+  return age
 }
