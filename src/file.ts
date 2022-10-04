@@ -1,3 +1,5 @@
+import { strOrNumType } from "./interface"
+import { isNumber, formatNumber } from "./number"
 
 /**
  * @description 文件类型映射表
@@ -59,10 +61,11 @@ export enum fileTypeEnum {
 /**
  * @group 【file】
  * @category 获取文件类型【根据文件名、或File对象的type字段】
- * @param {string} fileName 
+ * @param {string} fileName 文件名，或File对象的type字段
+ * @param {boolean} onlySuffix 是否只返回后缀名称
  * @return {fileTypeEnum} 文件类型
  */
-export const getFileType = (fileName: string): fileTypeEnum | '' => {
+export const getFileType = (fileName: string, onlySuffix: boolean = false): fileTypeEnum | string => {
   if (!fileName || !fileName.includes('.') || !fileName.includes('/')) {
     return ''
   }
@@ -71,6 +74,56 @@ export const getFileType = (fileName: string): fileTypeEnum | '' => {
     return ''
   }
   // 先过滤以下，看是否有匹配的
-  const fileSuffix = fileSuffixArr[fileSuffixArr.length -1]
+  let fileSuffix = fileSuffixArr[fileSuffixArr.length -1]
+  if (fileSuffix) {
+    fileSuffix = fileSuffix.toLowerCase()
+  }
+  if (onlySuffix) {
+    return fileSuffix
+  }
   return fileTypeObj[fileSuffix] || 'FILE'
+}
+
+/**
+ * @description 格式化文件size类型
+ * @return {*}
+ */
+export interface formatFileSizeInterface {
+  fileSize: strOrNumType // 文件size大小
+  decimalNum: number // 是否需要单位
+  needUnit?: boolean // 是否需要单位
+  separator?: boolean // 是否需要添加千分位
+}
+
+/**
+ * @group 【file】
+ * @category 格式化文件size
+ * @param {formatFileSizeInterface} params 文件size大小
+ * @return {string} 格式化后的文件size
+ */
+export const formatFileSize = ({
+  fileSize,
+  decimalNum = 2,
+  needUnit = true,
+  separator = false
+}: formatFileSizeInterface): string => {
+  if (!isNumber(fileSize)) {
+    return '未知大小'
+  }
+  const kb = +fileSize / 1024
+  const m = kb / 1024
+  const g = kb / 1024
+  let unit = ''
+  let size = 0
+  if (kb < 1024) {
+    unit = 'KB'
+    size = kb
+  } else if (m < 1024) {
+    unit = 'M'
+    size = m
+  } else {
+    unit = 'G'
+    size = g
+  }
+  return `${formatNumber(size, decimalNum, separator)}${needUnit ? unit : ''}`
 }
