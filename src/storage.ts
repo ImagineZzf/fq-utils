@@ -1,3 +1,4 @@
+import { hasWindow } from "./brower"
 import { getDataType, isEmpty, transfromDataType } from "./common"
 import { DATA_LIMIT_NUMBER, DateTimeDiffType, getDate, getTimeDiffAbs, isDate, isLessThanTargetDate } from "./date"
 import { baseType, dateType } from "./interface"
@@ -21,7 +22,7 @@ export interface storageObj {
  * @return {baseType} 返回获取到的value值
  */
 export const getStorage = (key: string): baseType => {
-  if (typeof window === 'undefined') {
+  if (!hasWindow()) {
     return
   }
   const value = localStorage.getItem(key)
@@ -68,7 +69,7 @@ export const getStorage = (key: string): baseType => {
   * @return {*}
   */
  export const setStorage = (key: string, value: baseType, expire: dateType = 365, containType: boolean = true): void => {
-  if (typeof window === 'undefined') {
+  if (!hasWindow()) {
     return
   }
   const params: storageObj = {
@@ -91,7 +92,7 @@ export const getStorage = (key: string): baseType => {
  * @return {*}
  */
 export const removeStorage = (key: string): void => {
-  if (typeof window === 'undefined') {
+  if (!hasWindow()) {
     return
   }
   localStorage.removeItem(key)
@@ -103,7 +104,7 @@ export const removeStorage = (key: string): void => {
  * @return {*}
  */
  export const clearStorage = (): void => {
-  if (typeof window === 'undefined') {
+  if (!hasWindow()) {
     return
   }
   localStorage.clear()

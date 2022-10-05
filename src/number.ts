@@ -14,7 +14,6 @@ export const isNumber = (params: any): boolean => {
   return !isNaN(+params)
 }
 
-
 /**
  * @group 【number】
  * @category 数字小于10进行自动补零

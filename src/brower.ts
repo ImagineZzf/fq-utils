@@ -19,7 +19,7 @@ export enum browerType {
  * @return {browerType}
  */
 export const getBrowerType = (): browerType | 'unknown' => {
-  if (typeof window === 'undefined') {
+  if (!hasWindow()) {
     return 'unknown'
   }
   const ua = navigator.userAgent.toLowerCase()
@@ -111,8 +111,17 @@ export const isPcWeixin = (): boolean => {
  * @return {boolean}
  */
 export const isMobile = (): boolean => {
-  if (typeof window === 'undefined') {
+  if (!hasWindow()) {
     return false
   }
   return !!navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+}
+
+/**
+ * @group 【brower】
+ * @category 是否有window对象
+ * @return {boolean}
+ */
+export const hasWindow = (): boolean => {
+  return typeof window !== 'undefined'
 }
