@@ -206,3 +206,175 @@ export const getTimeDiff = (firstDate: dateType, secondDate: dateType = new Date
 export const isLessThanTargetDate = (compareDate: dateType, targetDate: dateType = new Date()): boolean => {
   return getTimeDiff(compareDate, targetDate) < 0
 }
+
+/**
+ * @group 【date】
+ * @category 获取目标日期零点的时间戳
+ * @param {dateType} targetDate 目标日期
+ * @return {number} 返回目标日期零点的时间戳
+ */
+export const getZeroEndTimeStamp = (targetDate: dateType = new Date(), returnStamp: boolean = true): dateType => {
+  const newDate = getDate(targetDate)
+  newDate.setHours(0, 0, 0, 0)
+  if (!returnStamp) {
+    return newDate
+  }
+  return newDate.getTime()
+}
+
+/**
+ * @description 日期文案显示的分秒类型
+ * @return {*}
+ */
+export enum dateTextMinuteSecondsTypeType {
+  noNeed = 0, // 不需要显示分秒
+  needAbout = 1, // 需要显示几分钟前、几小时前（当天的）
+  needDetail = 2, // 需要显示具体的分秒
+}
+/**
+ * @description 日期展示文案类型
+ * @return {*}
+ */
+export interface dateTextInterface {
+  targetDate: dateType
+  minuteSecondsType?: dateTextMinuteSecondsTypeType // 日期文案显示的分秒类型，0--不需要分秒，1--显示几分钟前，几小时前（当天的），2--显示具体的分秒
+  format?: string
+  monthDayFormat?: string,
+  hoursMinuteFormat?: string
+}
+
+/**
+ * @group 【date】
+ * @category 获取日期展示文案
+ * @param {dateTextInterface} 参数
+ * @return {string} 处理后的日期展示文案
+ */
+export const getDateText = ({
+  targetDate,
+  minuteSecondsType = dateTextMinuteSecondsTypeType.needAbout,
+  format = 'YYYY-MM-DD',
+  monthDayFormat = 'MM-DD',
+  hoursMinuteFormat = 'HH:ss'
+}: dateTextInterface): string => {
+  const targetTime = getDate(targetDate)
+  const targetTimeStamp = targetTime.getTime() // 要处理的日期时间戳
+  const currentTime = new Date()
+  const currentTimeStamp = currentTime.getTime() // 当前日期时间戳
+  const currentZeroEndTimeStamp = getZeroEndTimeStamp() as number; // 当前日期零点的时间戳
+  const timeDiff = (currentTimeStamp - targetTimeStamp) / +DATA_LIMIT_NUMBER.second // 取当前时间戳与目标时间戳的差值
+  const dayDiff = Math.ceil((currentZeroEndTimeStamp - targetTimeStamp) / +DATA_LIMIT_NUMBER.day) //  取当日零点时间戳与目标时间戳的差值
+  const dayDiffAbs = Math.abs(dayDiff)
+  const week = ['一', '二', '三', '四', '五', '六', '日']
+  let todayInWeek = currentTime.getDay()
+  if (todayInWeek === 0) {
+    todayInWeek = 7
+  }
+  let tip = ''
+  // 今天及未来时间
+  if (targetTimeStamp >= currentZeroEndTimeStamp) {
+    // 在今天0点-当前时间戳范围内的日期
+    if (targetTimeStamp <= currentTimeStamp && minuteSecondsType === dateTextMinuteSecondsTypeType.needAbout) {
+      if (Math.floor(timeDiff / 60) <= 0) {
+        // 1分钟内
+        return '刚刚'
+      } else if (timeDiff < 3600) {
+        // 1小时内
+        return Math.floor(timeDiff / 60) + '分钟前'
+      } else {
+        return Math.floor(timeDiff / 3600) + '小时前'
+      }
+    }
+    if (dayDiffAbs === 0) {
+      tip = '今天'
+    } else if (dayDiffAbs === 1) {
+      tip = '明天'
+    } else if (dayDiffAbs <= 7 - todayInWeek) {
+      tip = `周${week[todayInWeek + dayDiffAbs - 1]}`
+    }
+  } else {
+    // 昨天及以前
+    if (dayDiff === 1) {
+      tip = ' 昨天'
+    } else if (dayDiff < todayInWeek) {
+      tip = `周${week[todayInWeek - dayDiff - 1]}`
+    }
+  }
+
+  if (!tip) {
+    if (currentTime.getFullYear() !== targetTime.getFullYear()) {
+      // 如果跨年
+      tip = formatDate(targetTime, format)
+    } else {
+      tip = formatDate(targetTime, monthDayFormat)
+    }
+  }
+
+  if (minuteSecondsType !== dateTextMinuteSecondsTypeType.noNeed) {
+    tip = `${tip} ${formatDate(targetTime, hoursMinuteFormat)}`
+  }
+
+  return tip
+}
+/**
+ * @group 【date】
+ * @category 获取某个月有多少天
+ * @param {dateType} targetDate 目标日期
+ * @return {number} 返回天数
+ */
+export const getDaysOfMonth = (targetDate: dateType = new Date()): number => {
+  const newDate = getDate(targetDate)
+  newDate.setMonth(newDate.getMonth() + 1, 0)
+  return newDate.getDate()
+}
+
+/**
+ * @group 【date】
+ * @category 获取目标日期N天后或N天前的日期
+ * @param {number} day 天数【可正可负】，如果为负数，则为N天前的日期
+ * @param {dateType} targetDate 目标日期
+ * @param {string} format 日期格式
+ * @return {string} 格式化后的N天后的日期
+ */
+export const getDateAfterDay = (day: number, targetDate: dateType = new Date(), format: string = 'YYYY-MM-DD'): string => {
+  const newDate = getDate(targetDate)
+  newDate.setDate(newDate.getDate() + parseInt(day + ''))
+  return formatDate(newDate, format)
+}
+
+/**
+ * @description 年龄比较精度
+ * @return {*}
+ */
+export enum ageComparePrecision {
+  year = 'year',
+  month = 'month',
+  day = 'day'
+}
+
+/**
+ * @group 【date】
+ * @category 获取年龄大小
+ * @param {dateType} birthDay 出生日期
+ * @return {number} 返回年龄
+ */
+export const getAge = (birthDay: dateType, comparePrecision: ageComparePrecision = ageComparePrecision.year): number => {
+  const birthDate = getDate(birthDay) // 出生日期
+  const currentDate = new Date() // 当前日期
+  let age = currentDate.getFullYear() - birthDate.getFullYear()
+  switch(comparePrecision) {
+    case ageComparePrecision.month:
+      if (currentDate.getMonth() < birthDate.getMonth()) {
+        age--
+      }
+      break;
+    case ageComparePrecision.day:
+      if (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate()) {
+        age--
+      }
+      break;
+    default:
+      break;
+  }
+
+  return age
+}
