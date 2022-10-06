@@ -1,5 +1,17 @@
+import { getDataType } from "./common"
 import { strOrNumType } from "./interface"
 import { isNumber, formatNumber } from "./number"
+import { isString } from "./string"
+
+/**
+ * @group 【file】
+ * @category 是否是File
+ * @param {any} params 传入的内容
+ * @return {boolean}
+ */
+ export const isFile = (params: any): boolean => {
+  return getDataType(params) === 'file'
+}
 
 /**
  * @description 文件类型映射表
@@ -126,4 +138,89 @@ export const formatFileSize = ({
     size = g
   }
   return `${formatNumber(size, decimalNum, separator)}${needUnit ? unit : ''}`
+}
+
+/**
+ * @group 【file】
+ * @category 是否是blob
+ * @param {any} params 传入的内容
+ * @return {boolean}
+ */
+export const isBlob = (params: any): boolean => {
+  return getDataType(params) === 'blob'
+}
+
+/**
+ * @group 【file】
+ * @category base64加密
+ * @param {string} params 传入的内容
+ * @return {string} base64加密后的内容
+ */
+ export const base64Encode = (params: string): string => {
+  if (!isString(params)) {
+    return ''
+  }
+  return btoa(params)
+}
+
+/**
+ * @group 【file】
+ * @category base64解密
+ * @param {string} params 传入的内容
+ * @return {string} base64解密后的内容
+ */
+ export const base64Decode = (params: string): string => {
+  if (!isString(params)) {
+    return ''
+  }
+  return atob(params)
+}
+
+/**
+ * @group 【file】
+ * @category base64转blob
+ * @param {string} params 传入的内容
+ * @param {string} type blob的类型，非必填，如果不填，则根据params中获取，获取不到，则为undefined
+ * @return {Blob} 返回blob
+ */
+export const base64ToBlob = (params: string, type?: string): Blob => {
+  if (!isString(params)) {
+    throw new Error('请传入base64字符串')
+  }
+  const isContainType = params.includes(',')
+  const base64Data = isContainType ? params.split(',')[1] : params
+  const byteString = base64Decode(base64Data)
+  let contentType;
+  if (isString(type) && type !== '') {
+    contentType = type
+  } else if (isContainType) {
+    const matchArr = params.match(/^\w+\:(\w+\/\w+)\;\S+/)
+    contentType = matchArr.length > 1 ? matchArr[1] : void(0)
+  }
+  if (!contentType) {
+    throw new Error('请传入type')
+  }
+  // const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ia], {type: contentType});
+}
+
+/**
+ * @group 【file】
+ * @category blob转base64，或者file转base64
+ * @param { Blob | File } params 传入的内容
+ * @return {Promise<string | ArrayBuffer>}
+ */
+export const blobOrFileToBase64 = (params: Blob | File): Promise<string | ArrayBuffer> => {
+  if (!isBlob(params) && !isFile(params)) {
+    throw new Error('请传入Blob或File格式的数据')
+  }
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(params);
+  });
 }
