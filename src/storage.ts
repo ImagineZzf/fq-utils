@@ -42,7 +42,7 @@ export const getStorage = (key: string): baseType => {
         return returnEmptyValue
       }
       // 判断过期时间是否是数字【单位：天】，则判断当前时间与存入时间之间的差值，是否大于过期时间
-      if (isNumber(obj.expire) && obj.hasOwnProperty('date') && isDate(obj.date) && getTimeDiffAbs(obj.date, new Date(), DateTimeDiffType.NUMBER) > ((obj.expire as number) * (DATA_LIMIT_NUMBER.day as number))) {
+      if (isNumber(obj.expire) && obj.hasOwnProperty('date') && isDate(obj.date) && (getTimeDiffAbs(obj.date, new Date(), DateTimeDiffType.NUMBER) as number) > ((obj.expire as number) * (DATA_LIMIT_NUMBER.day as number))) {
         // 已经过期，则清除该storage
         removeStorage(key)
         return returnEmptyValue

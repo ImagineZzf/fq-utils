@@ -23,3 +23,33 @@ import { getDataType, isEmpty } from "./common"
 export const getArrayFromNumber = (params: number): number[] => {
   return Array.from({length: params}).map((item, index) => index + 1)
 }
+
+/**
+ * @group 【array】
+ * @category 将一维数组转换成树状tree结构
+ * @param params  传入的数组
+ * @param onlyKey 唯一code
+ * @param parentKey 父节点字段
+ * @param childrenKey 子节点字段
+ * @returns 
+ */
+export const getTreeFromArray = (params: any[], onlyKey = 'code', parentKey = 'parent', childrenKey = 'children'): any[] => {
+  if (!isArray(params, 0)) {
+    return []
+  }
+  const treeData = []
+  const treeMap = {}
+  params.map((item, index)=>{
+    treeMap[item[onlyKey]] = index
+    item[childrenKey] = []
+    if(!item[parentKey]){
+      treeData.push(item) 
+    }
+  })
+  params.map((item, index)=>{
+    if (item[parentKey]) {
+      params[treeMap[item[parentKey]]][childrenKey].push(item)
+    }
+  })
+  return treeData
+}
