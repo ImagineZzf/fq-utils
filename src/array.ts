@@ -28,19 +28,19 @@ export const getArrayFromNumber = (params: number): number[] => {
  * @group 【array】
  * @category 将一维数组转换成树状tree结构
  * @param params  传入的数组
- * @param onlyKey 唯一code
+ * @param key 唯一code
  * @param parentKey 父节点字段
  * @param childrenKey 子节点字段
  * @returns 
  */
-export const getTreeFromArray = (params: any[], onlyKey = 'code', parentKey = 'parent', childrenKey = 'children'): any[] => {
+export const getTreeFromArray = (params: any[], key = 'code', parentKey = 'parent', childrenKey = 'children'): any[] => {
   if (!isArray(params, 0)) {
     return []
   }
   const treeData = []
   const treeMap = {}
   params.map((item, index)=>{
-    treeMap[item[onlyKey]] = index
+    treeMap[item[key]] = index
     item[childrenKey] = []
     if(!item[parentKey]){
       treeData.push(item) 
