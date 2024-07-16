@@ -28,9 +28,9 @@ export const getArrayFromNumber = (params: number): number[] => {
  * @group 【array】
  * @category 将一维数组转换成树状tree结构
  * @param params  传入的数组
- * @param key 唯一code
- * @param parentKey 父节点字段
- * @param childrenKey 子节点字段
+ * @param key 唯一code，默认code
+ * @param parentKey 父节点字段，默认parent
+ * @param childrenKey 子节点字段，默认children
  * @returns 树状tree数组
  */
 export const getTreeFromArray = (params: any[], key = 'code', parentKey = 'parent', childrenKey = 'children'): any[] => {
@@ -58,7 +58,7 @@ export const getTreeFromArray = (params: any[], key = 'code', parentKey = 'paren
  * @group 【array】
  * @category 将tree数组转换成一维数组
  * @param params 传入的tree数组
- * @param childrenKey 子节点字段
+ * @param childrenKey 子节点字段，默认children
  * @returns 一维数组
  */
 export const getArrayFromTree = (params: any[], childrenKey = 'children') => {
@@ -82,9 +82,9 @@ export const getArrayFromTree = (params: any[], childrenKey = 'children') => {
 /**
  * @group 【array】
  * @category 从tree数组中过滤需要的数据
- * @param treeData 
- * @param predicate 
- * @param childrenKey 
+ * @param treeData tree数组
+ * @param predicate 过滤函数，可以自定义逻辑
+ * @param childrenKey 子元素的key，默认children
  * @returns 过滤后的数据
  */
 export const filterTree = (treeData: any[], predicate: any = () => true, childrenKey = 'children') => {
